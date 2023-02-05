@@ -21,7 +21,7 @@ class Model: NSObject {
     var delegate: calculatorProtocol?
     
     // variable that store the calculation (expression) which helps to show it on screen.
-    var textOnLabel = "0"
+    var textOnLabel = AppStrings.INITIAL_VALUE
 
     // Variable that helps to find number is decimal or not
     var isDecimal: Bool = false
@@ -36,11 +36,13 @@ class Model: NSObject {
      Method that will show updated expression on the screen.
      */
     func updateLabel() {
-        if self.textOnLabel.count > 1 && self.textOnLabel.starts(with: "0") {
+        if self.textOnLabel.count > 1 && self.textOnLabel.starts(with: AppStrings.ZERO) {
             self.textOnLabel.remove(at: self.textOnLabel.startIndex)
         }
-        if self.textOnLabel.starts(with: "x") || self.textOnLabel.starts(with: "+") || self.textOnLabel.starts(with: "÷") {
-            self.textOnLabel = "0"
+        if self.textOnLabel.starts(with: AppStrings.MULTPLE_FRONT_END) ||
+            self.textOnLabel.starts(with: AppStrings.PLUS) ||
+            self.textOnLabel.starts(with: AppStrings.DIVIDE_FRONT_END) {
+            self.textOnLabel = AppStrings.INITIAL_VALUE
         }
         delegate?.showUpdatedTextOnScreen(textOnLabel: self.textOnLabel)
     }
@@ -49,10 +51,13 @@ class Model: NSObject {
      Method that will check the last element is a operation or not.
      */
     func isLastElementSymbol() -> Bool {
-        if self.textOnLabel.last == "+" ||
-            self.textOnLabel.last == "-" ||
-            self.textOnLabel.last == "x" ||
-            self.textOnLabel.last == "÷" {
+        guard let lastElement = self.textOnLabel.last else {
+            return false
+        }
+        if String(lastElement) == AppStrings.PLUS ||
+            String(lastElement) == AppStrings.MINUS ||
+            String(lastElement) == AppStrings.MULTPLE_FRONT_END ||
+            String(lastElement) == AppStrings.DIVIDE_FRONT_END {
             return true
         }
         return false
@@ -71,7 +76,10 @@ class Model: NSObject {
      Method that will set state of variables if click is on operation buttons.
      */
     func setDecimalCheckVariablesWhenOperationsClicked() {
-        if self.textOnLabel.last == "." {
+        guard let lastElement = self.textOnLabel.last else {
+            return
+        }
+        if String(lastElement) == AppStrings.DOT {
             isDecimal = false
             isDecimalSecondaryCheck = false
         }
@@ -81,70 +89,38 @@ class Model: NSObject {
      Method that will remove last element iff last element is a symbol.
      */
     func checkLastElement() {
-        if self.textOnLabel.last == "+" ||
-            self.textOnLabel.last == "-" ||
-            self.textOnLabel.last == "x" ||
-            self.textOnLabel.last == "÷" ||
-            self.textOnLabel.last == "." {
+        guard let lastElement = self.textOnLabel.last else {
+            return
+        }
+        if String(lastElement) == AppStrings.PLUS ||
+            String(lastElement) == AppStrings.MINUS ||
+            String(lastElement) == AppStrings.MULTPLE_FRONT_END ||
+            String(lastElement) == AppStrings.DIVIDE_FRONT_END ||
+            String(lastElement) == AppStrings.DOT {
             _ = self.textOnLabel.popLast()
         }
     }
 
     /**
-     A recursive method that will calculate the result of an expression.
+     A method that will calculate the result of an expression.
      */
-    func calculateResult() -> Float {
-        var op: String = ""
-        var num = ""
-        var isMinus: Bool = false
-        while true {
-            print("##", self.textOnLabel)
-            if self.textOnLabel.count == 0 {
-                break
-            }
-            if self.textOnLabel.first == "+" ||
-                self.textOnLabel.first == "-" ||
-                self.textOnLabel.first == "x" ||
-                self.textOnLabel.first == "÷" {
-                op = String(self.textOnLabel.first!)
-                self.textOnLabel = String(self.textOnLabel.dropFirst())
-                if op == "-" && num == "" {
-                    isMinus = true
-                    continue
-                }
-                break
-            } else {
-                num += String(self.textOnLabel.first!)
-                self.textOnLabel = String(self.textOnLabel.dropFirst())
-            }
+    func calculateResult() -> Double {
+        let mappedString = String(self.textOnLabel.map{
+            if ($0 == Character(AppStrings.MULTPLE_FRONT_END)) {
+                return Character(AppStrings.MULTIPLE_BACK_END)
+            } else if ($0 == Character(AppStrings.DIVIDE_FRONT_END)) {
+                return Character(AppStrings.DIVIDE_BACK_END)
+          } else {
+            return $0
+          }
+        })
+        let expression = NSExpression(format: mappedString)
+        let result = expression.expressionValue(with: nil, context: nil) as? Double
+        guard let result = result else {
+          return 0.0
         }
-        if op == "+" {
-            if isMinus {
-                return -Float(num)! + calculateResult()
-            }
-            return Float(num)! + calculateResult()
-        } else if op == "-" {
-            if isMinus {
-                return -Float(num)! - calculateResult()
-            }
-            return Float(num)! - calculateResult()
-        } else if op == "x" {
-            if isMinus {
-                return -Float(num)! * calculateResult()
-            }
-            return Float(num)! * calculateResult()
-        } else if op == "÷" {
-            if isMinus {
-                return -Float(num)! / calculateResult()
-            }
-            return Float(num)! / calculateResult()
-        } else {
-            if isMinus {
-                return -Float(num)!
-            }
-            return Float(num)!
-        }
-    }
+        return result
+      }
 }
 
 //MARK: Extension
@@ -152,68 +128,68 @@ class Model: NSObject {
 extension Model: calculatorBackendProtocol {
     func btnZeroClicked() {
         setDecimalSecondaryCheckStatus()
-        self.textOnLabel += "0"
+        self.textOnLabel += AppStrings.ZERO
         updateLabel()
     }
     
     func btnOneClicked() {
         setDecimalSecondaryCheckStatus()
-        self.textOnLabel += "1"
+        self.textOnLabel += AppStrings.ONE
         updateLabel()
     }
     
     func btnTwoClicked() {
         setDecimalSecondaryCheckStatus()
-        self.textOnLabel += "2"
+        self.textOnLabel += AppStrings.TWO
         updateLabel()
     }
     
     func btnThreeClicked() {
         setDecimalSecondaryCheckStatus()
-        self.textOnLabel += "3"
+        self.textOnLabel += AppStrings.THREE
         updateLabel()
     }
     
     func btnFourClicked() {
         setDecimalSecondaryCheckStatus()
-        self.textOnLabel += "4"
+        self.textOnLabel += AppStrings.FOUR
         updateLabel()
     }
     
     func btnFiveClicked() {
         setDecimalSecondaryCheckStatus()
-        self.textOnLabel += "5"
+        self.textOnLabel += AppStrings.FIVE
         updateLabel()
     }
     
     func btnSixClicked() {
         setDecimalSecondaryCheckStatus()
-        self.textOnLabel += "6"
+        self.textOnLabel += AppStrings.SIX
         updateLabel()
     }
     
     func btnSevenClicked() {
         setDecimalSecondaryCheckStatus()
-        self.textOnLabel += "7"
+        self.textOnLabel += AppStrings.SEVEN
         updateLabel()
     }
     
     func btnEightClicked() {
         setDecimalSecondaryCheckStatus()
-        self.textOnLabel += "8"
+        self.textOnLabel += AppStrings.EIGHT
         updateLabel()
     }
     
     func btnNineClicked() {
         setDecimalSecondaryCheckStatus()
-        self.textOnLabel += "9"
+        self.textOnLabel += AppStrings.NINE
         updateLabel()
     }
     
     func btnPlusClicked() {
         setDecimalCheckVariablesWhenOperationsClicked()
         checkLastElement()
-        self.textOnLabel += "+"
+        self.textOnLabel += AppStrings.PLUS
         updateLabel()
         isDecimal = false
     }
@@ -222,20 +198,20 @@ extension Model: calculatorBackendProtocol {
         setDecimalCheckVariablesWhenOperationsClicked()
         isDecimal = false
         // Explicitely handle the 0.- condition
-        if self.textOnLabel == "0." {
-            self.textOnLabel = "0"
+        if self.textOnLabel == AppStrings.ZERO + AppStrings.DOT {
+            self.textOnLabel = AppStrings.ZERO
             updateLabel()
             return
         }
         checkLastElement()
-        self.textOnLabel += "-"
+        self.textOnLabel += AppStrings.MINUS
         updateLabel()
     }
     
     func btnMultiplyClicked() {
         setDecimalCheckVariablesWhenOperationsClicked()
         checkLastElement()
-        self.textOnLabel += "x"
+        self.textOnLabel += AppStrings.MULTPLE_FRONT_END
         updateLabel()
         isDecimal = false
     }
@@ -243,7 +219,7 @@ extension Model: calculatorBackendProtocol {
     func btnDivideClicked() {
         setDecimalCheckVariablesWhenOperationsClicked()
         checkLastElement()
-        self.textOnLabel += "÷"
+        self.textOnLabel += AppStrings.DIVIDE_FRONT_END
         updateLabel()
         isDecimal = false
     }
@@ -253,14 +229,14 @@ extension Model: calculatorBackendProtocol {
             return
         }
         checkLastElement()
-        self.textOnLabel == "0" ? (self.textOnLabel += "0.") : (self.textOnLabel += ".")
+        self.textOnLabel == AppStrings.ZERO ? (self.textOnLabel += AppStrings.ZERO + AppStrings.DOT) : (self.textOnLabel += AppStrings.DOT)
         updateLabel()
         isDecimal = true
         isDecimalSecondaryCheck = true
     }
     
     func btnEqualToClicked() {
-        if self.textOnLabel == "0" {
+        if self.textOnLabel == AppStrings.ZERO {
             return
         }
         checkLastElement()
@@ -279,10 +255,10 @@ extension Model: calculatorBackendProtocol {
     
     func btnDELClicked() {
         setDecimalCheckVariablesWhenOperationsClicked()
-        if self.textOnLabel == "0" {
+        if self.textOnLabel == AppStrings.ZERO {
             return
         } else if self.textOnLabel.count == 1 {
-            self.textOnLabel = "0"
+            self.textOnLabel = AppStrings.ZERO
             updateLabel()
             return
         } else {
@@ -292,7 +268,7 @@ extension Model: calculatorBackendProtocol {
     }
     
     func btnACClicked() {
-        self.textOnLabel = "0"
+        self.textOnLabel = AppStrings.ZERO
         updateLabel()
         isDecimal = false
         isDecimalSecondaryCheck = false

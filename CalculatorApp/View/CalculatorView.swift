@@ -61,7 +61,7 @@ class CalculatorView: UIView {
      method that will set the view of calculator.
      */
     func setView() {
-        self.backgroundColor = .black
+        self.backgroundColor = AppConstants.APP_BACKGROUND_COLOR
 
         // Verticle stackview that will store entire view of calculator.
         let stackView = UIStackView()
@@ -82,10 +82,10 @@ class CalculatorView: UIView {
         /**
          First row that wil show the expression on the screen.
          */
-        row1.text = "0"
+        row1.text = AppStrings.INITIAL_VALUE
         row1.textAlignment = .right
-        row1.textColor = .white
-        row1.font = UIFont.systemFont(ofSize: 30)
+        row1.textColor = AppConstants.DISPLAY_LABEL_COLOR
+        row1.font = AppConstants.DISPLAY_LABEL_FONT
         stackView.addArrangedSubview(row1)
 
         /**
@@ -94,7 +94,10 @@ class CalculatorView: UIView {
         let row2 = UIStackView()
         addHorizontalStackViewConstraints(stackView: row2)
 
-        for button in [createButton(backgroundColor: .gray, text: "%"), createButton(backgroundColor: .gray, text: "DEL"), createButton(backgroundColor: .gray, text: "AC"), createButton(backgroundColor: .orange, text: "÷")] {
+        for button in [ createButton(backgroundColor: AppConstants.ADDITIONAL_FUNCTIONALITY_BUTTON_COLOR, text: AppStrings.PERCENTAGE),
+                        createButton(backgroundColor: AppConstants.ADDITIONAL_FUNCTIONALITY_BUTTON_COLOR, text: AppStrings.DELETE),
+                        createButton(backgroundColor: AppConstants.ADDITIONAL_FUNCTIONALITY_BUTTON_COLOR, text: AppStrings.ALL_CLEAR),
+                        createButton(backgroundColor: AppConstants.OPERATION_BUTTON_COLOR, text: AppStrings.DIVIDE_FRONT_END) ] {
             row2.addArrangedSubview(button)
         }
         stackView.addArrangedSubview(row2)
@@ -105,7 +108,10 @@ class CalculatorView: UIView {
         let row3 = UIStackView()
         addHorizontalStackViewConstraints(stackView: row3)
 
-        for button in [createButton(backgroundColor: .systemBlue, text: "7"), createButton(backgroundColor: .systemBlue, text: "8"), createButton(backgroundColor: .systemBlue, text: "9"), createButton(backgroundColor: .orange, text: "x")] {
+        for button in [ createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.SEVEN),
+                        createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.EIGHT),
+                        createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.NINE),
+                        createButton(backgroundColor: AppConstants.OPERATION_BUTTON_COLOR, text: AppStrings.MULTPLE_FRONT_END) ] {
             row3.addArrangedSubview(button)
         }
         stackView.addArrangedSubview(row3)
@@ -116,7 +122,10 @@ class CalculatorView: UIView {
         let row4 = UIStackView()
         addHorizontalStackViewConstraints(stackView: row4)
 
-        for button in [createButton(backgroundColor: .systemBlue, text: "4"), createButton(backgroundColor: .systemBlue, text: "5"), createButton(backgroundColor: .systemBlue, text: "6"), createButton(backgroundColor: .orange, text: "-")] {
+        for button in [ createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.FOUR),
+                        createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.FIVE),
+                        createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.SIX),
+                        createButton(backgroundColor: AppConstants.OPERATION_BUTTON_COLOR, text: AppStrings.MINUS) ] {
             row4.addArrangedSubview(button)
         }
         stackView.addArrangedSubview(row4)
@@ -127,7 +136,10 @@ class CalculatorView: UIView {
         let row5 = UIStackView()
         addHorizontalStackViewConstraints(stackView: row5)
 
-        for button in [createButton(backgroundColor: .systemBlue, text: "1"), createButton(backgroundColor: .systemBlue, text: "2"), createButton(backgroundColor: .systemBlue, text: "3"), createButton(backgroundColor: .orange, text: "+")] {
+        for button in [ createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.ONE),
+                        createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.TWO),
+                        createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.THREE),
+                        createButton(backgroundColor: AppConstants.OPERATION_BUTTON_COLOR, text: AppStrings.PLUS) ] {
             row5.addArrangedSubview(button)
         }
         stackView.addArrangedSubview(row5)
@@ -141,9 +153,9 @@ class CalculatorView: UIView {
         row6.translatesAutoresizingMaskIntoConstraints = false
         row6.spacing = 1.0
 
-        let btnZero = createButton(backgroundColor: .systemBlue, text: "0")
-        let btnDot = createButton(backgroundColor: .systemBlue, text: ".")
-        let btnEqualTo = createButton(backgroundColor: .orange, text: "=")
+        let btnZero = createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.ZERO)
+        let btnDot = createButton(backgroundColor: AppConstants.DIGIT_BUTTON_COLOR, text: AppStrings.DOT)
+        let btnEqualTo = createButton(backgroundColor: AppConstants.OPERATION_BUTTON_COLOR, text: AppStrings.EQUAL_TO)
 
         for button in [btnZero, btnDot, btnEqualTo] {
             row6.addArrangedSubview(button)
@@ -177,49 +189,49 @@ class CalculatorView: UIView {
         button.setTitle(text, for: .normal)
         button.backgroundColor = backgroundColor
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 30)
+        button.titleLabel?.font = AppConstants.BUTTON_TEXT_FONT
         
         switch(text) {
-        case "0":
+        case AppStrings.ZERO:
             button.addTarget(self, action: #selector(btnZeroClicked), for: .touchUpInside)
-        case "1":
+        case AppStrings.ONE:
             button.addTarget(self, action: #selector(btnOneClicked), for: .touchUpInside)
-        case "2":
+        case AppStrings.TWO:
             button.addTarget(self, action: #selector(btnTwoClicked), for: .touchUpInside)
-        case "3":
+        case AppStrings.THREE:
             button.addTarget(self, action: #selector(btnThreeClicked), for: .touchUpInside)
-        case "4":
+        case AppStrings.FOUR:
             button.addTarget(self, action: #selector(btnFourClicked), for: .touchUpInside)
-        case "5":
+        case AppStrings.FIVE:
             button.addTarget(self, action: #selector(btnFiveClicked), for: .touchUpInside)
-        case "6":
+        case AppStrings.SIX:
             button.addTarget(self, action: #selector(btnSixClicked), for: .touchUpInside)
-        case "7":
+        case AppStrings.SEVEN:
             button.addTarget(self, action: #selector(btnSevenClicked), for: .touchUpInside)
-        case "8":
+        case AppStrings.EIGHT:
             button.addTarget(self, action: #selector(btnEightClicked), for: .touchUpInside)
-        case "9":
+        case AppStrings.NINE:
             button.addTarget(self, action: #selector(btnNineClicked), for: .touchUpInside)
-        case ".":
+        case AppStrings.DOT:
             button.addTarget(self, action: #selector(btnDotClicked), for: .touchUpInside)
-        case "+":
+        case AppStrings.PLUS:
             button.addTarget(self, action: #selector(btnPlusClicked), for: .touchUpInside)
-        case "-":
+        case AppStrings.MINUS:
             button.addTarget(self, action: #selector(btnMinusClicked), for: .touchUpInside)
-        case "x":
+        case AppStrings.MULTPLE_FRONT_END:
             button.addTarget(self, action: #selector(btnMultiClicked), for: .touchUpInside)
-        case "÷":
+        case AppStrings.DIVIDE_FRONT_END:
             button.addTarget(self, action: #selector(btnDivideClicked), for: .touchUpInside)
-        case "AC":
+        case AppStrings.ALL_CLEAR:
             button.addTarget(self, action: #selector(btnACClicked), for: .touchUpInside)
-        case "DEL":
+        case AppStrings.DELETE:
             button.addTarget(self, action: #selector(btnDELClicked), for: .touchUpInside)
-        case "%":
+        case AppStrings.PERCENTAGE:
             button.addTarget(self, action: #selector(btnPercentageClicked), for: .touchUpInside)
-        case "=":
+        case AppStrings.EQUAL_TO:
             button.addTarget(self, action: #selector(btnEqualToClicked), for: .touchUpInside)
         default:
-            assertionFailure("This case should not call...")
+            assertionFailure(AppStrings.SWITCH_ASSERT_MESSAGE)
         }
         return button
     }
