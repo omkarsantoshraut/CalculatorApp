@@ -1,10 +1,11 @@
 # Calculator Application (iOS)
 
 #### Table Of Content
-[Short Description](#sdesc)
-[Design](#design)
-[Architecture](#arch)
-[Responsive View Pictures](#view)
+* [Short Description](#sdesc)
+* [Design](#design)
+* [Architecture](#arch)
+* [Responsive View Pictures](#view)
+* [Testing Video](#testing)
 
 
 <a name="sdesc"/>
@@ -39,5 +40,14 @@ The project is about the calculator iOS application using swift programming lang
 <a name="view"/>
 
 ### Responsive View Pictures
-* Here is a responsive view on portrait mode of iPhone 13 pro max.
-<img src="https://drive.google.com/uc?export=view&id=1I0OzVKyMT5A4FszofgEZiTqnFNaISInO" height="600px"/>
+* Responsive views is the backbone of all type of applications. I used AutoLayout and made the responsive view of calculator app. Here are a responsive views on portrait and landscape modes of iPhone 13 pro max. <br />
+
+![CalculatorApp-Portrait](https://user-images.githubusercontent.com/83705143/216827848-0c51383e-f9a5-487c-8911-1c41b3f2c22d.png)
+
+![CalculatorApp-Landscape](https://user-images.githubusercontent.com/83705143/216827783-865a4fd4-513a-4b60-b344-fea003b6f3d3.png)
+
+<a id=testing>
+
+### Testing Video:
+
+https://user-images.githubusercontent.com/83705143/216827809-2de6ccf8-beee-452e-81d0-33b243dcae77.mov
